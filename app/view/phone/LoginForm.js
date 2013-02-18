@@ -1,7 +1,7 @@
 /**
- * @class MyNamespace.LoginForm
- * @extends Object
- * Description
+ * @class Trinus.view.phone.LoginForm
+ * @extends Ext.form.Panel
+ * This is the login panel for the trinus app
  */
 Ext.define('Trinus.view.phone.LoginForm', {
     extend: 'Ext.form.Panel',
@@ -30,13 +30,13 @@ Ext.define('Trinus.view.phone.LoginForm', {
                 xtype: 'emailfield',
                 name: 'email',
                 placeHolder: lang.email,
-                value: 'enrique@codetlan.com',
+                value: '5544444444',
                 clearIcon: true
             }, {
                 xtype: 'passwordfield',
                 name: 'password',
                 placeHolder: lang.password,
-                value: '111',
+                value: '444',
                 clearIcon: true
             }]
         }, {
@@ -56,7 +56,7 @@ Ext.define('Trinus.view.phone.LoginForm', {
                     });
 
                     var invocation = new XMLHttpRequest(),
-                        url = 'http://isystems.com.mx:8181/Trinus/ServletLogin?email=' + obj.email + '&password=' + obj.password;
+                        url = 'http://isystems.com.mx:8181/Trinus/ServletLogin?movil=' + obj.email + '&password=' + obj.password;
                     if (invocation) {
                         invocation.open('POST', url, true);
                         invocation.onreadystatechange = form.logear.bind(form);
@@ -74,11 +74,10 @@ Ext.define('Trinus.view.phone.LoginForm', {
     },
     logear: function (response) {
         if (response.target.readyState == 4 && response.target.status == 200) {
-            console.log(response);
             var r = Ext.decode(response.target.responseText);
             if (r.result === "ok") {
                 localStorage.setItem("Logeado", r.token); //Se guarda un identificador para no perder la session
-                localStorage.setItem("Usuario", r.usuario);
+                localStorage.setItem("Usuario", Ext.encode(r));
                 this.fireEvent("logeado", r);
                 this.setMasked(false);
             } else {

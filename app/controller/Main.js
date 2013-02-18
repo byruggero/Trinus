@@ -4,10 +4,13 @@ Ext.define('Trinus.controller.Main', {
 	config: {
 		refs: {
 			main: {
-				
+				selector: 'main'
 			}
 		},
 		control: {
+			'loginform':{
+				logeado:'onUserLogin'
+			}
 		}
 	}
 });
