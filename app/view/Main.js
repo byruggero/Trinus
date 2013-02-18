@@ -7,6 +7,6 @@ Ext.define('Trinus.view.Main', {
         layout: 'card',
         fullscreen: true,
         autoDestroy: false,
-        activeItem:2
+        activeItem:0
     }
 });

@@ -24,18 +24,27 @@ Ext.define('Trinus.controller.phone.Main', {
             'trinusmenu button': {
                 tap: 'onTrinusMenuTap'
             },
-            'main container button':{
-				tap: 'setCurrenLocation'
+            'main container button': {
+                tap: 'setCurrenLocation'
             },
-            'infocontainer button':{
-				tap:'showUserOptions'
+            'infocontainer button': {
+                tap: 'showUserOptions'
+            },
+            'drivercontainer button': {
+                tap: 'backToMapPanel'
+            },
+            'usercontainer button': {
+                tap: 'backToMapPanel'
             }
         }
     },
-	onUserLogin:function  (argument) {
-		var me = this;
-		me.getMain().animateActiveItem(1, {type: 'slide', direction: 'left'});
-	},
+    onUserLogin: function (argument) {
+        var me = this;
+        me.getMain().animateActiveItem(1, {
+            type: 'slide',
+            direction: 'left'
+        });
+    },
     onAddressChange: function (map, obj, data) {
         var dir = obj.formatted_address.split(','),
             mainAddress = dir.shift();
@@ -48,9 +57,11 @@ Ext.define('Trinus.controller.phone.Main', {
     onTrinusMenuTap: function (btn) {
         if (btn.action === 'getCab') {
             this.getCab(this.getMap().getClientAddress());
-        }
-        else{
-			this.getMain().animateActiveItem(2, {type: 'slide', direction: 'up'});
+        } else {
+            this.getMain().animateActiveItem(2, {
+                type: 'slide',
+                direction: 'up'
+            });
         }
     },
     getCab: function (data) {
@@ -60,7 +71,7 @@ Ext.define('Trinus.controller.phone.Main', {
                 '&direccion=' + data.address + '&latitud=' + data.lat + '&longitud=' + data.lng +
                 '&observ=' + 'peticion mobile' + '&token=' + localStorage.getItem('Logeado'),
             url = 'http://isystems.com.mx:8181/Trinus/ServletServicioMovil?' + params;
-            me.mask('Buscando al taxis, por favor espere..');
+        me.mask('Buscando al taxis, por favor espere..');
         if (invocation) {
             invocation.open('POST', url, true);
             invocation.onreadystatechange = function (response) {
@@ -83,7 +94,7 @@ Ext.define('Trinus.controller.phone.Main', {
             params = 'idCliente=' + Ext.decode(localStorage.getItem('Usuario')).idCliente +
                 '&estatus=ACEPTADO&token=' + localStorage.getItem('Logeado'),
             url = 'http://isystems.com.mx:8181/Trinus/DatosTaxista?' + params;
-            me.mask('Buscando al taxista mas cercano, por favor espere..');
+        me.mask('Buscando al taxista mas cercano, por favor espere..');
         if (invocation) {
             invocation.open('POST', url, true);
             invocation.onreadystatechange = function (response) {
@@ -111,11 +122,36 @@ Ext.define('Trinus.controller.phone.Main', {
             me.getMain().setMasked(false);
         }
     },
-    setCurrenLocation:function(){
-		this.getMap().clearMarkers();
-		this.getMap().setCurrentPosition();
+    setCurrenLocation: function () {
+        this.getMap().clearMarkers();
+        this.getMap().setCurrentPosition();
     },
-    showUserOptions:function(){
-		this.getMain().animateActiveItem(2, {type: 'slide', direction: 'left'});
+    showUserOptions: function () {
+        this.getMain().animateActiveItem(3, {
+            type: 'slide',
+            direction: 'left'
+        });
+    },
+    backToMapPanel:function(btn){
+        if(btn.action === 'salir'){//limpiamos sesión
+            localStorage.removeItem('Usuario');
+            localStorage.removeItem('Logeado');
+            this.getMain().animateActiveItem(0, {
+                type: 'slide',
+                direction: 'right'
+            });
+        }
+        else if(btn.action === 'back'){
+            this.getMain().animateActiveItem(1, {
+                type: 'slide',
+                direction: 'right'
+            });
+        }
+        else{
+            this.getMain().animateActiveItem(1, {
+                type: 'slide',
+                direction: 'down'
+            });
+        }
     }
 });
